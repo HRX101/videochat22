@@ -1,0 +1,37 @@
+{%extends 'index.html'%}
+{%load static%}
+{%block body%}
+<div class="main-part">
+<img src="{%static 'images/images00.png'%}">
+<h1>Welcome</h1>
+<form id="form">
+    <div class="form-field">
+        <input type="text" name="room" placeholder="enter your room name ---" style="text-transform:uppercase;" />
+    </div>
+    <div class="form-field">
+        <input type="text" name="username" placeholder="enter your name ---" style="text-transform:uppercase;" />
+    </div>
+    <div class="form-field">
+        <input type="submit" value="Join Stream" />
+    </div>
+</form>
+</div>
+<script type="text/javascript">
+let form=document.getElementById('form')
+let handlesubmit =async(e)=>{
+    e.preventDefault()
+    let room=e.target.room.value.toUpperCase()
+    let name=e.target.username.value
+    let response=await fetch(`/get_token/?channel=${room}`)
+    let data=await response.json()
+    let UID=data.uid
+    let token=data.token
+    sessionStorage.setItem('UID',UID)
+    sessionStorage.setItem('token',token)
+    sessionStorage.setItem('room',room)
+    sessionStorage.setItem('name',name)
+    window.open('/room','_self')
+}
+form.addEventListener('submit',handlesubmit)
+</script>
+{%endblock body%}
